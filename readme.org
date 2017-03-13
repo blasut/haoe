@@ -159,4 +159,10 @@ gcc -m32 -g firstprog.c
    x/6cb $ecx
    #+END_SRC
 
+   ~disass~ shorthand för ~disassembler~ 
+
+   köra ~layout split~ är rätt soft för att se vilken assembler är till vilken rad kod.
+
+   
+   bra resurs: https://sourceware.org/gdb/onlinedocs/gdb/TUI-Commands.html
    
