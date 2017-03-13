@@ -18,3 +18,145 @@
    #+BEGIN_SRC sh
    set disassembly-flavor intel
    #+END_SRC
+
+   varför är exemplerna i boken eax och mina register blir "rax"? Pga olika arkitektur
+   
+   EIP - lite samma som när jag gjorde BF grejen.
+
+   instruktionerna är: operation <destination>, <source>
+
+   mov(e) värdet från register -> register
+   #+BEGIN_SRC asm
+        mov ebp,esp
+   #+END_SRC
+
+   inc, sub
+
+   flow of execution:
+
+   cmp = compare
+
+   j[...] = jump beroende på vad som kommer efter 'j'
+
+   Varför är 9 skrivet "0x9"? enligt internet: "0" betyder att det är en konstant. x pga conventation
+
+   #+BEGIN_SRC asm
+        cmp ebp,0x9 ; jämför värdet i ebp med siffran 9. 0x9
+        jle 8048393 ; jle => jump if less than or equal to. hur får den värdet? vad *händer* när 'cmp' körs? Värdet sparas i EFLAGS
+        jmp 80483a6 ; jmp => jump, hoppar alltid. denna körs ej om ovanstående jump kördes
+   #+END_SRC
+
+   koden som genereras är annorlunda. antagligen pga bättre kompilatorer
+
+   #+BEGIN_SRC sh
+   info register eip
+   #+END_SRC
+
+   funkar ej, så kör 
+
+   #+BEGIN_SRC sh
+   info register rip
+   #+END_SRC
+
+   istället
+
+   #+BEGIN_SRC sh
+   e(x)amine
+   #+END_SRC
+
+   examine memory
+
+   x location of memory to display/how to display
+
+   | display command | explanation                                                         |
+   |-----------------+---------------------------------------------------------------------|
+   | o               | Display in octal.                                                   |
+   | x               | Display in hexadecimal.                                             |
+   | u               | Display in unsigned, standard base-10 decimal. t Display in binary. |
+   | t               | Display in binary.                                                  |
+   | i               | Display in (asm) instructions.                                      |
+   | s               | Display as (ASCII) string.                                          |
+   
+
+   $ innan ett register är betyder: Referera till värdet av registeret
+
+   
+   #+BEGIN_SRC sh
+   x/o $rip
+   #+END_SRC
+
+   x kör en unit i taget: 
+   
+   ovanstående är samma som:
+
+   #+BEGIN_SRC sh
+   x/1o $rip
+   #+END_SRC
+   
+   går o köra flera samtidigt:
+
+   #+BEGIN_SRC sh
+   x/12o $rip
+   #+END_SRC
+   
+
+   en unit är by default 4-byte aka ett 'word'
+   
+   men ibland kan ett 'word' vara 2-byte. DWORD == double word == 4-byte
+   
+   2-byte kallas "short" eller "halfword"
+   
+   storleken på display enheten kan ändras genom postfix bokstav
+
+   | display command size | explanation                                                                  |
+   |----------------------+------------------------------------------------------------------------------|
+   | b                    | A single byte                                                                |
+   | h                    | A halfword, which is two bytes in size w A word, which is four bytes in size |
+   | w                    | A word, which is four bytes in size                                          |
+   | g                    | A giant, which is eight bytes in size                                        |
+
+   
+   #+BEGIN_SRC sh
+   x/8xb $rip
+   #+END_SRC
+
+   x86 processorer lagrar sina värden i /little-endian byte order/ det innebär att ??? 'the least significatn byte is stored first'. Vad innebär det? Att de bytes som är minst lagras först. Beroende på hur värdet visas kan ordningen ändras. lite oklart vad "lagras" exakt innebär.
+
+   #+BEGIN_SRC asm
+   0x100000f4f <main+15>:	mov    DWORD PTR [rbp-0x8],0x0 
+   #+END_SRC
+ 
+   flyttar värdet 0 till adressen i rbp-8. i boken äre -4, 32/64? kan tänka mig att 64bit processorer använder 8-bit ints
+   
+   För att kompilera till 32bitar: 
+#+BEGIN_SRC sh
+gcc -m32 -g firstprog.c
+#+END_SRC
+   
+   verkar som att registerna heter samma men börjar på olika första char beroende på arkitektur. 32 bit = eip, 64 bit = rip
+   
+   ~print~ används för att göra enkel matte, lr framförallt spara vars med pointers till en viss minnes-slot
+
+   min disassembly är med JGE istället för JLE   
+   
+   använder även ~lea~ https://stackoverflow.com/questions/1658294/whats-the-purpose-of-the-lea-instruction 
+   https://stackoverflow.com/questions/1699748/what-is-the-difference-between-mov-and-lea
+   
+   LEA = load effective address
+   MOV = load value
+   
+   kort: LEA laddar en pointer till en adress medan MOV laddar det faktiska värdet på adressen.
+
+   #+BEGIN_SRC asm
+   LEA ax, [BP+SI+5] ; Compute address of value
+   MOV ax, [BP+SI+5] ; Load value at that address
+   #+END_SRC
+
+
+   boken letar i ett specifkt ställe, men i min kod så är strängen i ~ecx~ registeret:
+
+   #+BEGIN_SRC asm
+   x/6cb $ecx
+   #+END_SRC
+
+   
