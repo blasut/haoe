@@ -1,0 +1,14 @@
+* Notes:
+** chapter 2
+   för att få intel syntax på mac:
+   #+BEGIN_SRC sh
+   objdump -x86-asm-syntax=intel -D a.out
+   #+END_SRC
+
+   måste installera gdb
+
+   #+BEGIN_SRC sh
+   brew install gdb
+   #+END_SRC
+   
+   signa med sudo, måste skriva lösen då o då
