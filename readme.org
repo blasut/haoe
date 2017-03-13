@@ -12,3 +12,9 @@
    #+END_SRC
    
    signa med sudo, måste skriva lösen då o då
+
+   nice inställning i ~/.gdbinit för att hänga med i boken
+
+   #+BEGIN_SRC sh
+   set disassembly-flavor intel
+   #+END_SRC
